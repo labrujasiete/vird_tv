@@ -8,7 +8,8 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          centerTitle: true,
+          centerTitle: false,
+          backgroundColor: Colors.transparent,
           title: const Text('Vird TV'),
           elevation: 0,
           actions: [
