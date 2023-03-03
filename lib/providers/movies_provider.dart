@@ -15,16 +15,20 @@ class MoviesProvider extends ChangeNotifier{
   List<Movie> onDisplayMovies = [];
   List<Movie> popularMovies = [];
 
+  Map<int, List<Cast>> moviesCast = {};
+
+  int _popularPage = 0;
+
   MoviesProvider(){
     getOnDisplayMovies();
     getOnPopularMovies();
   }
 
-  Future<String> _getJsonData( String endpoint) async{
+  Future<String> _getJsonData( String endpoint, [int page = 1]) async{
     var url = Uri.https(_baseUrl, endpoint, {
       'api_key':_apiKey,
       'languaje':_language,
-      'page': '1',
+      'page': '$page',
       });
 
     final response = await http.get(url);
@@ -55,17 +59,27 @@ class MoviesProvider extends ChangeNotifier{
 
 
   getOnPopularMovies()async{
-    var url = Uri.https(_baseUrl, '3/movie/popular', {
-      'api_key':_apiKey,
-      'languaje':_language,
-      'page': '1',
-      });
 
-    final response = await http.get(url);
-    final popularResponse = PopularResponse.fromJson(response.body);
+    _popularPage++;
+
+    final jsonData = await _getJsonData('3/movie/popular', 1);
+    final popularResponse = PopularResponse.fromJson(jsonData);
 
     popularMovies = [ ...popularMovies, ...popularResponse.results ];
     notifyListeners();
+  }
+
+
+  Future<List<Cast>> getMoviesCast(int movieId) async{
+    final jsonData = await _getJsonData('3/movie/$movieId/credits');
+    final creditsResponse = CreditsResponse.fromRawJson( jsonData );
+    print('getMoviesCast-----------------------');
+    print(creditsResponse.cast);
+  
+    moviesCast[movieId] = creditsResponse.cast;
+
+    return creditsResponse.cast;
+
   }
 
 }
