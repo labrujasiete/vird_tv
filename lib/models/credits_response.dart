@@ -20,7 +20,6 @@ class CreditsResponse {
     String toRawJson() => json.encode(toJson());
 
     factory CreditsResponse.fromJson(Map<String, dynamic> json) => CreditsResponse(
-        //TODO: aqui checar json
         id: json["id"],
         cast: List<Cast>.from(json["cast"].map((x) => Cast.fromJson(x))),
         crew: List<Cast>.from(json["crew"].map((x) => Cast.fromJson(x))),

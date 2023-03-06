@@ -73,9 +73,7 @@ class MoviesProvider extends ChangeNotifier{
   Future<List<Cast>> getMoviesCast(int movieId) async{
     final jsonData = await _getJsonData('3/movie/$movieId/credits');
     final creditsResponse = CreditsResponse.fromRawJson( jsonData );
-    print('getMoviesCast-----------------------');
-    print(creditsResponse.cast);
-  
+
     moviesCast[movieId] = creditsResponse.cast;
 
     return creditsResponse.cast;
