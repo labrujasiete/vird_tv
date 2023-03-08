@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:vird_tv/models/models.dart';
+import 'package:vird_tv/models/search_response.dart';
 
 
 
@@ -71,13 +72,32 @@ class MoviesProvider extends ChangeNotifier{
 
 
   Future<List<Cast>> getMoviesCast(int movieId) async{
+    if(moviesCast.containsKey(movieId)) return moviesCast[movieId]!;
     final jsonData = await _getJsonData('3/movie/$movieId/credits');
-    final creditsResponse = CreditsResponse.fromRawJson( jsonData );
+
+    // no response, ??
+    final creditsResponse = CreditsResponse.fromJson( jsonData );
 
     moviesCast[movieId] = creditsResponse.cast;
 
     return creditsResponse.cast;
 
   }
+
+  Future<List<Movie>> searchMovies( String query ) async{
+
+    final url = Uri.https(_baseUrl, '3/search/movie', {
+      'api_key':_apiKey,
+      'languaje':_language,
+      'query' : query,
+    });
+
+    final response = await http.get(url);
+    final searchResponse = SearchResponse.fromJson(response.body);
+    return searchResponse.results;
+
+  }
+  
+
 
 }

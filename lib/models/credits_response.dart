@@ -1,6 +1,6 @@
 // To parse this JSON data, do
 //
-//     final creditsResponse = creditsResponseFromJson(jsonString);
+//     final creditsResponse = creditsResponseFromMap(jsonString);
 
 import 'dart:convert';
 
@@ -15,20 +15,27 @@ class CreditsResponse {
     List<Cast> cast;
     List<Cast> crew;
 
-    factory CreditsResponse.fromRawJson(String str) => CreditsResponse.fromJson(json.decode(str));
+    factory CreditsResponse.fromJson(String str) { 
+      print('#####################');
+      return CreditsResponse.fromMap(json.decode(str));
+    }
 
-    String toRawJson() => json.encode(toJson());
+    String toJson() => json.encode(toMap());
 
-    factory CreditsResponse.fromJson(Map<String, dynamic> json) => CreditsResponse(
+    factory CreditsResponse.fromMap(Map<String, dynamic> json) {
+      
+
+       return CreditsResponse(  
         id: json["id"],
-        cast: List<Cast>.from(json["cast"].map((x) => Cast.fromJson(x))),
-        crew: List<Cast>.from(json["crew"].map((x) => Cast.fromJson(x))),
-    );
+        cast: List<Cast>.from(json["cast"].map((x) => Cast.fromMap(x))),
+        crew: List<Cast>.from(json["crew"].map((x) => Cast.fromMap(x))),
+      );
+    }
 
-    Map<String, dynamic> toJson() => {
+    Map<String, dynamic> toMap() => {
         "id": id,
-        "cast": List<dynamic>.from(cast.map((x) => x.toJson())),
-        "crew": List<dynamic>.from(crew.map((x) => x.toJson())),
+        "cast": List<dynamic>.from(cast.map((x) => x.toMap())),
+        "crew": List<dynamic>.from(crew.map((x) => x.toMap())),
     };
 }
 
@@ -71,11 +78,11 @@ class Cast {
       return 'https://i.stack.imgur.com/GNhxO.png';
     }
 
-    factory Cast.fromRawJson(String str) => Cast.fromJson(json.decode(str));
+    factory Cast.fromJson(String str) => Cast.fromMap(json.decode(str));
 
-    String toRawJson() => json.encode(toJson());
+    String toJson() => json.encode(toMap());
 
-    factory Cast.fromJson(Map<String, dynamic> json) => Cast(
+    factory Cast.fromMap(Map<String, dynamic> json) => Cast(
         adult: json["adult"],
         gender: json["gender"],
         id: json["id"],
@@ -92,7 +99,7 @@ class Cast {
         job: json["job"],
     );
 
-    Map<String, dynamic> toJson() => {
+    Map<String, dynamic> toMap() => {
         "adult": adult,
         "gender": gender,
         "id": id,
@@ -138,6 +145,8 @@ class EnumValues<T> {
         return reverseMap;
     }
 }
+
+
 
 
 
